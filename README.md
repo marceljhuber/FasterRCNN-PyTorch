@@ -26,7 +26,7 @@ This notebook is designed to assist in finding regions of interest in thousands 
 
 ## Resources
 
-- For more information about the COCO format, refer to this guide <a href="[https://www.kaggle.com/havinath](https://cocodataset.org/#format](https://www.neuralception.com/cocodatasetapi/)">How to use COCO for Object Detection</a>.
+For more information about the COCO format, refer to <a href="https://www.neuralception.com/cocodatasetapi/" target="_blank">this</a> guide.
 
 Feel free to explore and adapt the notebook according to your specific requirements.
 
