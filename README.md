@@ -2,7 +2,7 @@
 
 ![Example Image](example.jpeg)
 
-This notebook is designed to assist in finding regions of interest in thousands of OCT images and automatically resizing them. It was developed as part of my bachelor thesis, where I trained a GAN to analyze the latent space. It was created with great inspiration from the Kaggle user <a href="https://www.kaggle.com/havinath">Bingi</a> for an image segmentation Kaggle-challenge, where it even landed the best score. Check out the original notebook <a href="https://www.kaggle.com/code/havinath/object-detection-using-pytorch-training" target="_blank">here</a>.
+This notebook is designed to assist in finding regions of interest in thousands of OCT images and automatically resizing them. It was developed as part of my bachelor thesis, where I trained a GAN to analyze the latent space. It was created with great inspiration from the Kaggle user <a href="https://www.kaggle.com/havinath">Bingi</a> for an image segmentation Kaggle-challenge, where it even helped me securing first place. Check out the original notebook <a href="https://www.kaggle.com/code/havinath/object-detection-using-pytorch-training" target="_blank">here</a>.
 
 ## Prerequisites
 
