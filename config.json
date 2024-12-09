@@ -1,0 +1,9 @@
+{
+    "dir_train": "../KermanyV2/test",
+    "dir_test": "../KermanyV3/train",
+    "out_dir": "../KermanyV3_resized/train",
+    "size": 512,
+    "result_file": "result.json",
+    "model_path": "fasterrcnn_resnet50_fpn2_17July.pth",
+    "early_stop": 3
+}
