@@ -16,7 +16,7 @@ from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 
-from _get_dataframes import process_data
+from get_data_dfs import process_data
 
 
 # Utility Functions
@@ -84,30 +84,70 @@ class OCTDataset(Dataset):
         return len(self.image_ids)
 
 
+# class OCTTestDataset(Dataset):
+#     def __init__(self, dataframe, image_dir, transforms=None):
+#         super().__init__()
+#         self.image_ids = dataframe["image_id"].unique()
+#         self.df = dataframe
+#         self.image_dir = image_dir
+#         self.transforms = transforms
+#
+#         # Preload images into memory
+#         self.images = {}
+#         print("Preloading images into memory...")
+#         for image_id in tqdm(self.image_ids, desc="Loading Images"):
+#             image_path = os.path.abspath(image_id)
+#             image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+#             if image is not None:
+#                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
+#                 image /= 255.0  # Normalize to [0, 1]
+#                 self.images[image_id] = image
+#             else:
+#                 print(f"Warning: Unable to load image {image_id}")
+#
+#     def __getitem__(self, index: int):
+#         image_id = self.image_ids[index]
+#         image = self.images[image_id]
+#
+#         # Apply transformations
+#         if self.transforms:
+#             image = self.transforms(image)
+#
+#         return image, image_id
+#
+#     def __len__(self) -> int:
+#         return len(self.image_ids)
+
+
 class OCTTestDataset(Dataset):
     def __init__(self, dataframe, image_dir, transforms=None):
+        """
+        Initialize the dataset with lazy loading (load images in __getitem__).
+        """
         super().__init__()
-        self.image_ids = dataframe["image_id"].unique()[0:1000]
+        self.image_ids = dataframe["image_id"].unique()
         self.df = dataframe
         self.image_dir = image_dir
         self.transforms = transforms
 
-        # Preload images into memory
-        self.images = {}
-        print("Preloading images into memory...")
-        for image_id in tqdm(self.image_ids, desc="Loading Images"):
-            image_path = os.path.abspath(image_id)
-            image = cv2.imread(image_path, cv2.IMREAD_COLOR)
-            if image is not None:
-                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
-                image /= 255.0  # Normalize to [0, 1]
-                self.images[image_id] = image
-            else:
-                print(f"Warning: Unable to load image {image_id}")
-
     def __getitem__(self, index: int):
+        """
+        Load an image lazily (from disk) and apply transformations.
+        """
         image_id = self.image_ids[index]
-        image = self.images[image_id]
+
+        # Construct the full path
+        # print(self.image_dir, image_id)
+        image_path = os.path.join(image_id)
+
+        # Load the image
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+        if image is None:
+            raise FileNotFoundError(f"Image not found: {image_path}")
+
+        # Convert BGR to RGB and normalize
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
+        image /= 255.0  # Normalize to [0, 1]
 
         # Apply transformations
         if self.transforms:
@@ -115,9 +155,11 @@ class OCTTestDataset(Dataset):
 
         return image, image_id
 
-    def __len__(self) -> int:
+    def __len__(self):
+        """
+        Return the number of images in the dataset.
+        """
         return len(self.image_ids)
-
 
 
 class RandomHorizontalFlipWithBoxes:
@@ -255,7 +297,7 @@ if __name__ == "__main__":
         data_dir=config["dir_train"],
         test_df=test_df,
         batch_size=1,
-        num_workers=2,
+        num_workers=0,
     )
 
     print(f"Train samples: {len(train_loader.dataset)}")

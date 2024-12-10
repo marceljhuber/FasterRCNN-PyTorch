@@ -12,8 +12,8 @@ from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 
-from _get_dataframes import load_config, process_data
-from _get_dataloaders import get_data_loaders
+from get_data_dfs import load_config, process_data
+from get_data_loaders import get_data_loaders
 
 # Load config and process data
 config = load_config()

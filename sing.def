@@ -1,0 +1,41 @@
+BootStrap: docker
+From: python:3.9-slim
+
+%labels
+  Maintainer FasterRCNN
+
+%post
+  # Install system dependencies
+  apt-get update && apt-get install -y \
+    build-essential \
+    python3-dev \
+    python3-pip \
+    libsm6 libxext6 libxrender-dev \
+    wget \
+    curl \
+    unzip
+
+  # Install Python dependencies
+  pip install --upgrade pip
+  pip install \
+    opencv-python \
+    numpy \
+    pandas \
+    torch \
+    torchvision \
+    albumentations \
+    pillow \
+    ipython \
+    matplotlib \
+    tqdm \
+    numba \
+    pathlib
+
+%environment
+  # Set environment variables if needed
+  export PATH=$PATH:/usr/local/bin
+
+%runscript
+  # The default command to run when the container is executed
+  exec python3 "$@"
+
