@@ -1,8 +1,8 @@
 {
-    "dir_train": "../KermanyV2/test",
-    "dir_test": "../KermanyV3/train",
     "dir_train": "/home/mhuber/Thesis/data/KermanyV2/test",
     "dir_test": "/home/mhuber/Thesis/data/KermanyV3/train",
+    "dir_train": "../KermanyV2/test",
+    "dir_test": "../KermanyV3/train",
     "out_dir": "../KermanyV3_resized/train",
     "size": 512,
     "result_file": "result.json",

@@ -2,7 +2,6 @@ import os
 import numpy as np
 import pandas as pd
 import json
-from PIL import Image
 import warnings
 
 # Suppress warnings
@@ -35,9 +34,6 @@ def process_data(config):
     Processes training, validation, and test data based on the provided config.
     Returns the train, validation, and test dataframes.
     """
-    # Load directories and settings from config
-    current_dir = os.getcwd()
-    parent_dir = os.path.dirname(current_dir)
 
     dir_train = os.path.abspath(config["dir_train"])
     dir_test = os.path.abspath(config["dir_test"])
@@ -52,9 +48,6 @@ def process_data(config):
     # Get image paths
     images_path_train = list_jpeg_images(dir_train)
     images_path_test = list_jpeg_images(dir_test)
-
-    # Load and process training images
-    images_im_train = [Image.open(filename) for filename in images_path_train]
 
     # Load annotations from the JSON file
     with open(file, "r") as f:
@@ -78,14 +71,14 @@ def process_data(config):
         ]
 
     # Create dictionaries for converting the classes to their numerical ID
-    class_to_int = {0: "CNV", 1: "DME", 2: "DRUSEN", 3: "NORMAL"}
-    int_to_class = {v: k for k, v in class_to_int.items()}
+    int_to_class = {0: "CNV", 1: "DME", 2: "DRUSEN", 3: "NORMAL"}
+    class_to_int = {v: k for k, v in int_to_class.items()}
 
     # Process image file paths and shape
     for annot in data["images"]:
         cur_image_id = annot["id"]
-        image_filename = annot["file_name"][16:].split("-")[0]
-        image_class = int_to_class[image_filename]
+        image_class = annot["file_name"][16:].split("-")[0]
+        image_class = class_to_int[image_class]
 
         my_dataframe.loc[cur_image_id, "path"] = os.path.join(
             dir_train, str(image_class), annot["file_name"][16:]
@@ -152,8 +145,3 @@ if __name__ == "__main__":
     print(
         f"Training set size: {train_df.shape}, Validation set size: {valid_df.shape}, Test set size: {test_df.shape}"
     )
-
-    # Optionally, save dataframes to CSV for inspection
-    # train_df.to_csv("train_df.csv", index=False)
-    # valid_df.to_csv("valid_df.csv", index=False)
-    # test_df.to_csv("test_df.csv", index=False)
